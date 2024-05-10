@@ -1,5 +1,6 @@
 #import "AppDelegate.h"
 
+#import <Firebase.h>
 #import <React/RCTBundleURLProvider.h>
 
 @implementation AppDelegate
@@ -8,6 +9,7 @@
 {
   self.moduleName = @"POC_Crashlytics";
   // You can add your custom initial props in the dictionary below.
+  [FIRApp configure];
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
 
