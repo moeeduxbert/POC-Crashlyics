@@ -1,7 +1,9 @@
 import React, {useEffect} from 'react';
 import {View, Button, SafeAreaView} from 'react-native';
+import analytics from '@react-native-firebase/analytics';
 import crashlytics from '@react-native-firebase/crashlytics';
 
+// Handles user sign-in and logs the crashlytics data
 async function onSignIn(user) {
   crashlytics().log('User signed in.');
   await Promise.all([
@@ -17,12 +19,24 @@ async function onSignIn(user) {
 }
 
 export default function App() {
+  // Hook to log when app is mounted
   useEffect(() => {
     crashlytics().log('App mounted.');
   }, []);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex: 1}}>
+      <Button
+        title="Add To Basket"
+        onPress={async () =>
+          await analytics().logEvent('basket', {
+            id: 3745092,
+            item: 'mens grey t-shirt',
+            description: ['round neck', 'long sleeved'],
+            size: 'L',
+          })
+        }
+      />
       <Button
         title="Sign In and Crash"
         onPress={() => {
@@ -32,7 +46,7 @@ export default function App() {
             email: 'phoenix@example.com',
             credits: 42,
           });
-          throw new Error('Crash test'); // Throw an error to crash the app
+          throw new Error('Crash test');
         }}
       />
       <Button title="Test Crash" onPress={() => crashlytics().crash()} />
